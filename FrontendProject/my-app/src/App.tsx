@@ -9,28 +9,28 @@ import './App.css';
 
 function App() {
 
-  const [musicName, setMusicName] = useState("");
-  const [musicInfo, setMusicInfo] = useState(undefined);
-  const POKEMON_BASE_API_URL = "https://itunes.apple.com/search?term=";
-
+  const [userName, setUserName] = useState("");
+  const [genderInfo, setGenderInfo] = useState();
+  const [possibility, setPossibility] = useState();
+  const GENDER_BASE_API_URL = "https://api.genderize.io/?name=";
 
 
   return (
     <div>
       <div className="search-field">
-        <h1>iTunes Music Search</h1>
+        <h1>Guess your gender by your name!</h1>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
           <TextField
             id="search-bar"
             className="text"
-            value={musicName}
+            value={userName}
             onChange={(prop) => {
-              setMusicName(prop.target.value);
+              setUserName(prop.target.value);
             }}
-            label="Artist Name"
+            label="Your Name"
             variant="outlined"
-            placeholder="Search"
+            placeholder="Type your first name"
             size="medium"
           />
           <br />
@@ -38,26 +38,26 @@ function App() {
             onClick={() => {
               search();
             }}
+            variant="contained"
           >
-            <SearchIcon style={{ fill: "blue" }} />
-            Search
+            Guess!
           </Button>
         </div>
       </div>
 
-      {musicInfo === undefined ? (
+      {genderInfo === undefined ? (
         <div>
         </div>
       ) : (
         <div
-          id="pokemon-result"
+          id="gender-result"
           style={{
             maxWidth: "800px",
             margin: "0 auto",
             padding: "100px 10px 0px 10px",
           }}
         >
-          <Paper >
+          <Paper>
             <Grid
               container
               direction="row"
@@ -68,23 +68,18 @@ function App() {
             >
               <Grid item>
                 <Box>
-                  {musicInfo === undefined || musicInfo === null ? (
-                    <h1> Music not found</h1>
+                  {genderInfo === undefined || genderInfo === null ? (
+                    <h1> Oops! Your age is too hard to guess!</h1>
                   ) : (
                     <div>
                       <h1>
-                        {musicInfo}
+                        Your name: {userName}
                       </h1>
+                      <p>Your possible gender: <b> {genderInfo} </b> </p>
+                      <p>How possible this result is? {possibility}</p>
       
                     </div>
                   )}
-                </Box>
-              </Grid>
-              <Grid item>
-                <Box>
-                  
-                  
-                    <Skeleton width={300} height={300} />
                 </Box>
               </Grid>
             </Grid>
@@ -95,18 +90,20 @@ function App() {
   );
 
   function search() {
-    console.log(musicName);
-    if (musicName === undefined || musicName === "") {
+    console.log(userName);
+    if (userName === undefined || userName === "") {
       return;
     }
     axios
-      .get(POKEMON_BASE_API_URL + musicName.toLowerCase().trim().split(/\s+/).join("+"))
+      .get(GENDER_BASE_API_URL + userName.toLowerCase().trim().split(/\s+/).join())
       .then((res) => {
-        setMusicInfo(res.data);
+        setGenderInfo(res.data.gender);
+        setPossibility(res.data.probability);
       })
       .catch(() => {
-        setMusicInfo(undefined);
+        setGenderInfo(undefined);
       });
+
   }
 
 
