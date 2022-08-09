@@ -12,10 +12,14 @@ function App() {
     undefined
   );
   const POKEMON_BASE_API_URL = "https://pokeapi.co/api/v2";
+
+
+
   return (
     <div>
       <div className="search-field">
         <h1>Pokédex Search</h1>
+
         <div style={{ display: "flex", justifyContent: "center" }}>
           <TextField
             id="search-bar"
@@ -29,6 +33,7 @@ function App() {
             placeholder="Search..."
             size="medium"
           />
+          <br />
           <Button
             onClick={() => {
               search();
@@ -41,7 +46,11 @@ function App() {
       </div>
 
       {pokemonInfo === undefined ? (
-        <div></div>
+        <div>
+          {/* <p>
+            Pokemon not found
+          </p> */}
+        </div>
       ) : (
         <div
           id="pokemon-result"
